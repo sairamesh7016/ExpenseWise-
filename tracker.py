@@ -46,6 +46,30 @@ def show_total():
 
     print(f"\nTotal Spending: ₹{total}\n")
 
+def category_summary():
+    summary = {}
+
+    if not os.path.exists(FILE_NAME):
+        print("\nNo expenses recorded.\n")
+        return
+
+    with open(FILE_NAME, "r") as file:
+        for line in file:
+            date, category, amount, description = line.strip().split(",")
+
+            amount = float(amount)
+
+            if category in summary:
+                summary[category] += amount
+            else:
+                summary[category] = amount
+
+    print("\nSpending by Category:\n")
+
+    for category, total in summary.items():
+        print(f"{category}: ₹{total}")
+
+    print()
 
 def menu():
     while True:
@@ -53,8 +77,8 @@ def menu():
         print("1. Add Expense")
         print("2. View Expenses")
         print("3. Show Total Spending")
-        print("4. Exit")
-
+        print("4. Category Summary")
+        print("5. Exit")
         choice = input("Select option: ")
 
         if choice == "1":
@@ -65,13 +89,14 @@ def menu():
 
         elif choice == "3":
             show_total()
-
         elif choice == "4":
+            category_summary()
+        
+        elif choice == "5":
             print("Exiting program...")
             break
 
         else:
             print("Invalid choice. Try again.\n")
-
 
 menu()
